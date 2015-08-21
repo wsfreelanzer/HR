@@ -1,0 +1,2 @@
+[19-Aug-2015 08:03:34 UTC] PHP Fatal error:  Call to undefined function get_mysqli() in /home/juicevib/public_html/hr/application/libraries/Datatables.php on line 294
+[19-Aug-2015 08:04:19 UTC] PHP Fatal error:  Call to undefined function get_mysqli() in /home/juicevib/public_html/hr/application/libraries/Datatables.php on line 294
