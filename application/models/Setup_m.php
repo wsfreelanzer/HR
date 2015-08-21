@@ -26,12 +26,16 @@ class Setup_m extends CI_Model {
         return $query->result();
     }
 
-    function insert($data){
-       if($this->db->insert('setup', $data)){
-	   		return $this->db->insert_id();
-	   }
-		else
-			return FALSE;
+    function insert($data, $id = NULL){
+    	if($id){
+    		//update
+    		$insert_id =  $this->db->update('setup', $data, array('ID' => $id));
+    	}else{
+    		//insert new
+    		$insert_id = $this->db->insert('setup', $data);
+    	}
+
+    	return ($insert_id) ? $insert_id : FALSE;
     }
 
     function update($data,$id){

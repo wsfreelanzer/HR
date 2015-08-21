@@ -72,3 +72,4 @@ table.dataTable tbody td{border: 0px;border-bottom: 1px solid #d1d8dd;}
 table.dataTable thead th:last-child{padding: 10px 0px !important}
 table.dataTable tbody td:last-child{padding: 10px 0px}
 table.dataTable .icon-star{padding-right: 5px;}
+.status_msg{width: 60%;margin: 0 auto;}

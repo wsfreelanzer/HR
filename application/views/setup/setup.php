@@ -17,12 +17,15 @@
 
                 <div class="text-right col-sm-5 col-xs-6 page-actions">
                     <div class="btn-group menu-btn-group ">
-                        <a href="<?=site_url().'/setup/edit/'.$setup_type.''?>" class="btn btn-default btn-sm dropdown-toggle" data-toggle="modal" data-target="#baseModal">
+                        <a href="<?=site_url().'/setup/edit/'.$setup_type.''?>" class="btn btn-primary btn-sm new_modal" data-toggle="modal" data-target="#baseModal">
                             <span class="menu-btn-group-label">New</span>
+                        </a>
+                        
+                        <a href="#" class="btn btn-danger btn-sm bulk_delete" style="display:none">
+                            <span class="menu-btn-group-label">Delete</span>
                         </a>
 
                     </div>
-                   <button class="btn btn-primary btn-sm hide primary-action"></button>
                 </div>
 
             </div>
@@ -53,6 +56,7 @@
                             <div class="frappe-list-area">
                                 <div class="frappe-list">
                                     <div class="space-top15"></div>
+                                    <div class="status_msg"></div>
                                     <?php echo $this->table->generate(); ?>
                                 </div>
                             </div>
@@ -80,10 +84,11 @@
         "oLanguage": {
             "sProcessing": "<img src='<?php echo base_url(); ?>assets/images/ajax-loader.gif'>"
         },
+        aoColumnDefs: [{ 'bSortable': false, 'aTargets': [ 0 ] }],
         aoColumns : [{ "sWidth": "5%"},{ "sWidth": "95%"},],
         "fnInitComplete": function() {
                 //oTable.fnAdjustColumnSizing();
-         },
+        },
         'fnServerData': function(sSource, aoData, fnCallback){
               $.ajax
               ({
@@ -93,9 +98,61 @@
                 'data'    : aoData,
                 'success' : fnCallback
               });
+        },
+        "fnDrawCallback": function (oSettings) {
+          refreshSelectors()
         }
     } );
-} );
+
+    $('.setup_all_select').change(function(){
+        if(this.checked){
+            $('.setup_selector').prop('checked',true);
+
+            $('.new_modal').hide();
+            $('.bulk_delete').show();
+        }else{
+            $('.new_modal').show();
+            $('.bulk_delete').hide();
+            $('.setup_selector').prop('checked',false);
+        }
+    });
+
+    function refreshSelectors(){
+        $('.setup_selector').change(function(){
+            if(this.checked){
+                $('.new_modal').hide();
+                $('.bulk_delete').show();
+            }else{
+                if ( $('input[name="setup_arr[]"]:checked').length == 0 ){
+                    $('.new_modal').show();
+                    $('.bulk_delete').hide();    
+                }
+            }
+        });
+    }
+
+    $('.bulk_delete').click(function(){
+        var values = new Array();
+        $('.setup_selector:checked').each(function(){
+            values.push(this.value);
+        });
+
+        $.ajax({
+            type:"POST",
+            url:"<?=site_url('setup/delete/')?>",
+            data:{ids:values},
+            success:function(data){
+                var json = $.parseJSON(data);
+                $('.status_msg').html(json.msg);
+                if(json.insert){
+                    location.reload();
+                }
+            }
+        });
+    });
+    
+});
+
 </script>
 
 <!-- common modal -->

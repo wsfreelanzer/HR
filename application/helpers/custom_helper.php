@@ -36,7 +36,7 @@ if (!function_exists('dump_exit')) {
 
 function btn_chkbox($id)
 {
-    return '<input type="checkbox" value ="'.$id.'"> ';
+    return '<input type="checkbox" class="setup_selector" name="setup_arr[]" value ="'.$id.'"> ';
 }
 
 function btn_anchor($id,$title){
